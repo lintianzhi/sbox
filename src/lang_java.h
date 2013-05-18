@@ -7,6 +7,7 @@ class LangJAVA : public LangBase
 public:
     int ReadRuntimeLim();
     int GetVmPeak(pid_t pid, struct rusage *rsc);
+    void Monitor(pid_t pid);
     int Compile();
     void SetChrootEnv();
     int SetAllowedCall();

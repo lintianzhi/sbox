@@ -45,10 +45,11 @@ public:
     virtual void SetChrootEnv(){}
     virtual int ReadRuntimeLim();
     virtual int GetVmPeak(pid_t pid, struct rusage *rus);
+    int GetFileSize(const char *filename);
     int SetRuntimeLim();
     virtual int SetAllowedCall() = 0;
     virtual void Run() = 0;
-    void Monitor(pid_t pid);
+    virtual void Monitor(pid_t pid);
     void Start(const char *dir);
     void PrintRst();
     void PrintErrMsg(char *s);

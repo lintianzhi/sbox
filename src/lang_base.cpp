@@ -3,6 +3,7 @@
 #include <sys/user.h>
 #include <sys/ptrace.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <errno.h>
 #include <unistd.h>
 #include <cstring>
@@ -106,6 +107,15 @@ int LangBase::GetVmPeak(pid_t pid, struct rusage *rsc)
     return GetProcStatus(pid, "VmPeak");
 }
 
+int LangBase::GetFileSize(const char *filename)
+{
+    struct stat f_stat;
+
+    if(stat(filename, &f_stat) == -1)
+        return 0;
+    return f_stat.st_size;
+}
+
 void LangBase::Monitor(pid_t pid)
 {
     struct rusage rsc;
@@ -197,7 +207,7 @@ void LangBase::Monitor(pid_t pid)
             struct user_regs_struct reg;
             ptrace(PTRACE_GETREGS, pid, NULL, &reg);
 #ifdef DEBUG
-                printf("Process executed syscall: %ld\n", reg.orig_eax);
+//                printf("Process executed syscall: %ld\n", reg.orig_eax);
 #endif
             if(iAllowCall[reg.orig_eax] == 0)
             {
@@ -248,7 +258,7 @@ void LangBase::Start(const char *dir)
     printf("Compile OK\n");
 #endif
 
-    iErrFP = fopen("err", "w");
+    iErrFP = fopen("err", "a+");
 
     if(SetAllowedCall() != 0)
         return;
@@ -273,8 +283,9 @@ void LangBase::Start(const char *dir)
 //        }
         if(SetRuntimeLim() != 0)
             exit(1);
-        freopen("in","r", stdin);
-        freopen("out","w", stdout);
+        freopen("in", "r", stdin);
+        freopen("out", "w", stdout);
+        freopen("err", "a+", stderr);
         ptrace(PTRACE_TRACEME, 0, NULL, NULL);
         //exit(0);
 #ifdef DEBUG

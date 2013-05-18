@@ -33,6 +33,7 @@ int main(int argc, const char *argv[])
     }
     if(langexe)
     {
+        printf("%d\n", langexe->GetFileSize("README.md"));
         langexe -> Start(argv[2]);
         langexe -> PrintRst();
         delete langexe;

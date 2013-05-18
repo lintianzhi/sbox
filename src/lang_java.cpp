@@ -68,7 +68,7 @@ int LangJAVA::GetVmPeak(pid_t pid, struct rusage *rsc)
     int m_vmdata, m_vmpeak;
     m_vmpeak = GetProcStatus(pid, "VmPeak");
     m_vmdata = GetProcStatus(pid, "VmData");
-    printf("VmPeak: %d KB, VmData: %d KB, minflt: %d KB\n", m_vmpeak, m_vmdata, m_minflt);
+//    printf("VmPeak: %d KB, VmData: %d KB, minflt: %d KB\n", m_vmpeak, m_vmdata, m_minflt);
 #endif
     return m_minflt;
 }
@@ -100,9 +100,27 @@ int LangJAVA::SetAllowedCall()
 
 void LangJAVA::Run()
 {
+    freopen("err", "w", stderr);
     // already freopen && set limit
     execl("/usr/bin/java", "/usr/bin/java",
             "-Djava.security.manager",
             "-Djava.security.policy=./java.policy",
             "Main", (char *)NULL);
 }
+
+void LangJAVA::Monitor(pid_t pid)
+{
+    LangBase::Monitor(pid);
+    if(iOJ_flag == OJ_TC)
+    {
+        int status = GetFileSize("err");
+#ifdef DEBUG
+        printf("err file size: %d\n", status);
+#endif
+        if(status != 0)
+        {
+            iOJ_flag = OJ_RE;
+        }
+    }
+}
+
