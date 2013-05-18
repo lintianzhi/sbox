@@ -1,0 +1,2 @@
+/tmp/ccLBW52Q.o: In function `main':
+Main.c:(.text.startup+0x44): warning: the `gets' function is dangerous and should not be used.

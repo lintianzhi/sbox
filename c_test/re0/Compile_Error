@@ -1,0 +1,4 @@
+Main.c: In function ‘main’:
+Main.c:10:12: warning: ignoring return value of ‘freopen’, declared with attribute warn_unused_result [-Wunused-result]
+/tmp/cctybx47.o: In function `main':
+Main.c:(.text.startup+0x44): warning: the `gets' function is dangerous and should not be used.
