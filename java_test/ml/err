@@ -1,0 +1,2 @@
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+	at Main.main(Main.java:10)
